@@ -28,7 +28,13 @@ void dollar_sign(FILE* file) {
 	char str[256];
 	while((fgets(str, 256, file)) != NULL) {
 		int len = strlen(str);
-		str[len - 1] = '$';
+		if (str[len - 2] == '\r') {  // for Windows (CR LF)
+			str[len - 2] = '$';
+			str[len - 1] = '\r';
+		}
+		else { 
+		 	str[len - 1] = '$';
+		}
 		printf("%s\n", str);
 	}
 }
