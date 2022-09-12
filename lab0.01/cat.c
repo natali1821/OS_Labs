@@ -1,4 +1,5 @@
 #include "cat_functions.h"
+#include "unistd.h"
  
 int main(int argc, char** argv) {
 	if (argc < 2 || argc > 3 || (argc == 2 && argv[1][0] == '-')) {
@@ -27,35 +28,24 @@ int main(int argc, char** argv) {
 		}
 	}
 
-	for (int i  = 1; i < argc; i++) {
-		int option;
-		if (strcmp(argv[i], "-n") == 0) {
-			option = 1;
-		}
-		if (strcmp(argv[i], "-b") == 0) {
-			option = 2;
-		}
-		if (strcmp(argv[i], "-e") == 0) {
-			option = 3;
-		}
-		if (strcmp(argv[i], "-s") == 0) {
-			option = 4;
-		}
-		switch (option) {
-		case 1:
+	int option;
+	while ((option = getopt(argc, argv, "nbes")) != -1) {
+		switch(option) {
+		case 'n':
 			number(fp);
 			break;
-		case 2:
+		case 'b':
 			number_nonblank(fp);
 			break;
-		case 3:
+		case 'e':
 			dollar_sign(fp);
 			break;
-		case 4:
+		case 's':
 			multiple_empty_lines(fp);
 			break;
 		}
 	}
+
 	 
 	fclose(fp);
 	return 0;
