@@ -24,24 +24,31 @@ int main(int argc, char** argv) {
 	if (argc == 2) {
 		char str[256];
 		while((fgets(str, 256, fp)) != NULL) {
-		printf("%s", str);
+			printf("%s", str);
 		}
 	}
 
-	int option;
+	char option;
 	while ((option = getopt(argc, argv, "nbes")) != -1) {
 		switch(option) {
 		case 'n':
+			fprintf(stdout, "Flag -n: number lines\n\n");
 			number(fp);
 			break;
 		case 'b':
+			fprintf(stdout, "Flag -b: number only non-empty lines\n\n");
 			number_nonblank(fp);
 			break;
 		case 'e':
+			fprintf(stdout, "Flag -e: display a $ (dollar sign) at the end of each line\n\n");
 			dollar_sign(fp);
 			break;
 		case 's':
+			fprintf(stdout, "Flag -e: display a $ (dollar sign) at the end of each line\n\n");
 			multiple_empty_lines(fp);
+			break;
+		default:
+			fprintf(stderr, "Error. Unknown flag\n");
 			break;
 		}
 	}
