@@ -44,7 +44,7 @@ int main(int argc, char** argv) {
 			dollar_sign(fp);
 			break;
 		case 's':
-			fprintf(stdout, "Flag -e: display a $ (dollar sign) at the end of each line\n\n");
+			fprintf(stdout, "Flag -e: replace multiple consecutive empty lines with one empty line.\n\n");
 			multiple_empty_lines(fp);
 			break;
 		default:
