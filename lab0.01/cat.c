@@ -3,7 +3,7 @@
  
 int main(int argc, char** argv) {
 	if (argc < 2 || argc > 3 || (argc == 2 && argv[1][0] == '-')) {
-		printf("Incorrect input. Right usage: ./cat filename or ./cat filename -option");
+		printf("Incorrect input.\nRight usage: ./cat filename\nOR ./cat filename -option\n");
 		return 1;
 	}
 
