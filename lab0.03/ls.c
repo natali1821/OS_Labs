@@ -9,10 +9,10 @@ int main(int argc, char** argv) {
 		}
 		case 2: {
 			char option;
-			while ((option = getopt(argc, argv, "l:a")) != -1) {
+			while ((option = getopt(argc, argv, "l::a")) != -1) {
 				switch(option) {
 				case 'l':
-					if (strcmp(optarg, "a") == 0) {
+					if (optarg != NULL) {
 						printDirInfo('a');
 						break;
 					}
