@@ -62,6 +62,7 @@ void fileInfo(const char* filename) {
 	char datestring[256];
 	struct group* grp;
 	stat(filename, &sb);
+
 	printf("-");
 	printf((sb.st_mode & S_IRUSR)? "r":"-");
 	printf((sb.st_mode & S_IWUSR)? "w":"-");
@@ -75,18 +76,17 @@ void fileInfo(const char* filename) {
 	printf(" %ld", sb.st_nlink);
 
 	if ((pwd = getpwuid(sb.st_uid)) != NULL) {
-		printf(" %-8.8s", pwd->pw_name);
+		printf(" %s", pwd->pw_name);
 	}
 	else {
-		printf(" %-8d", sb.st_uid);
+		printf(" %d", sb.st_uid);
 	}
 
-	/* Print out group name if it is found using getgrgid(). */
 	if ((grp = getgrgid(sb.st_gid)) != NULL) {
-		printf(" %-8.8s", grp->gr_name);
+		printf(" %s", grp->gr_name);
 	}
 	else {
-		printf(" %-8d", sb.st_gid);
+		printf(" %d", sb.st_gid);
 	}
 
 	printf(" %ld", sb.st_size);
