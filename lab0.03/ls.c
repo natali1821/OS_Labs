@@ -4,7 +4,7 @@ int main(int argc, char** argv) {
 	switch(argc) {
 		case 1: {
 			char option = '0';
-			printDir(option);
+			printDir(option, "");
 			break;
 		}
 		case 2: {
@@ -13,15 +13,22 @@ int main(int argc, char** argv) {
 				switch(option) {
 				case 'l':
 					if (optarg != NULL) {
-						printDirInfo('a');
+						printDirInfo('a', "");
 						break;
 					}
-					printDirInfo(option);
+					printDirInfo(option, "");
 					break;
 				case 'a':
-					printDir(option);
+					printDir(option, "");
+					break;
+				default:
+						printf("Error. Unknown flag\n");
 					break;
 				}
+			}
+			
+			if (argv[1][0] != '-') {
+				printDir('0', argv[1]);
 			}
 			break;
 		}
@@ -34,8 +41,32 @@ int main(int argc, char** argv) {
 			}
 
 			char option;
-			while ((option = getopt(argc, argv, "l")) != -1) {
-				fileInfo(argv[file]);
+			while ((option = getopt(argc, argv, "l::a")) != -1) {
+				switch(option) {
+				case 'l':
+				{
+					if (optarg != NULL) {
+						printDirInfo('a', argv[file]);
+						break;
+					}
+					
+					struct stat sb;
+					stat(argv[file], &sb);
+					if (S_ISDIR(sb.st_mode)) {
+						printDirInfo(option, argv[file]);
+					}
+					else {
+						fileInfo(argv[file]);
+					}
+					break;
+				}
+				case 'a':
+					printDir(option, argv[file]);
+					break;
+				default:
+					printf("Error. Unknown flag\n");
+					break;
+				}
 			}
 			break;
 		}
