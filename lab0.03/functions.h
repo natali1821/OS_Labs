@@ -13,6 +13,6 @@
 #include <stdbool.h>
 
 int find(const char* str, const char* substr, int position);
-void printDir(char option);
+void printDir(char option, const char* str);
 void fileInfo(const char* str);
-void printDirInfo(char option);
+void printDirInfo(char option, const char* str);
