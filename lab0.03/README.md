@@ -3,22 +3,26 @@
 ```
 ./ls
 ```
-List directory contents
+List contents of the current directory
 ```
-./ls -l
+./ls specific_directory_path
+```
+List contents of a specific directory
+```
+./ls -l OR ./ls -l specific_directory_path
 ```
 Shows size, modified date and time, file or folder name and owner of the file, and its permission 
 of each file or subdirectory in the directory.
 ```
-./ls -a
+./ls -a OR ./ls -a specific_directory_path
 ```
 List all files including hidden files starting with '.'.
 ```
-./ls -la
+./ls -la OR ./ls -la specific_directory_path
 ```
 Shows file or directory, size, modified date and time, file or folder name and owner of the file, and its permission,
 including hidden files starting with '.'.
 ```
-./ls -l filename
+./ls -l path_to_filename
 ```
-Shows file or directory, size, modified date and time, file or folder name and owner of the file, and its permission.
+Shows file, size, modified date and time, file or folder name and owner of the file, and its permission.
