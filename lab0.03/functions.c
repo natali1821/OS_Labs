@@ -1,11 +1,15 @@
 #include "functions.h"
 
-void printDir(char option)
+void printDir(char option, const char* str)
 {	
-	char* dir= ".";
+	char dir[64] = ".";
 	DIR* dp;
 	struct dirent* entry;
 	struct stat sb;
+
+	if (strcmp("", str) != 0) {
+		strcpy(dir, str);
+	}
  
 	if ((dp = opendir(dir)) == NULL) {
 		fprintf(stderr, "Can`t open directory %s\n", dir);
@@ -34,10 +38,14 @@ void printDir(char option)
 	closedir(dp);	
 }
 
-void printDirInfo(char option) {
-	char* dir = ".";
+void printDirInfo(char option, const char* str) {
+	char dir[64] = ".";
 	DIR* dp;
 	struct dirent* entry;
+
+	if (strcmp("", str) != 0) {
+		strcpy(dir, str);
+	}
 
 	if ((dp = opendir(dir)) == NULL) {
 		fprintf(stderr, "Can`t open directory %s\n", dir);
@@ -63,7 +71,12 @@ void fileInfo(const char* filename) {
 	struct group* grp;
 	stat(filename, &sb);
 
-	printf("-");
+	if (S_ISDIR(sb.st_mode)) {
+		printf("d");
+	}
+	else {
+		printf("-");
+	}
 	printf((sb.st_mode & S_IRUSR)? "r":"-");
 	printf((sb.st_mode & S_IWUSR)? "w":"-");
 	printf((sb.st_mode & S_IXUSR)? "x":"-");
@@ -73,24 +86,31 @@ void fileInfo(const char* filename) {
 	printf((sb.st_mode & S_IROTH)? "r":"-");
 	printf((sb.st_mode & S_IWOTH)? "w":"-");
 	printf((sb.st_mode & S_IXOTH)? "x":"-");
+
 	printf(" %ld", sb.st_nlink);
 
 	if ((pwd = getpwuid(sb.st_uid)) != NULL) {
-		printf(" %s", pwd->pw_name);
+		printf(" %8s", pwd->pw_name);
 	}
 	else {
-		printf(" %d", sb.st_uid);
+		printf(" %8d", sb.st_uid);
 	}
 
 	if ((grp = getgrgid(sb.st_gid)) != NULL) {
-		printf(" %s", grp->gr_name);
+		printf(" %8s", grp->gr_name);
 	}
 	else {
-		printf(" %d", sb.st_gid);
+		printf(" %8d", sb.st_gid);
 	}
-
+	
 	printf(" %ld", sb.st_size);
-	printf(" %s", ctime(&sb.st_mtime));
+	
+	//printf(" %s", ctime(&sb.st_mtime));
+	char st[56];
+	struct tm *m_time;
+	m_time = localtime(&sb.st_mtime);
+	strftime(st, 56, "%c", m_time); 
+	printf(" %s", st);
 
 	if (S_ISDIR(sb.st_mode)) {
 		printf(" \033[94m%s\033[0m\n", filename);
