@@ -26,15 +26,6 @@ int main(int argc, char** argv) {
 	struct data data;
 	char str[SHM_SIZE];
 	char str1[SHM_SIZE];
-			
-	struct timespec ts;
-	clock_gettime(CLOCK_REALTIME, &ts);
-	struct tm* curr = localtime(&ts.tv_sec);
-	double sec_ns = (double)curr->tm_sec + ((double)ts.tv_nsec / 1000000000.);
-	strftime(str, SHM_SIZE, "[first] time: %X.", curr);
-	snprintf(str1, SHM_SIZE, "%.3lf pid: %d\n", sec_ns, getpid());
-	strcat(str, str1);
-	strncpy(data.str, str, SHM_SIZE);
 
 	key_t shm_key = ftok(SHM_NAME, 1); //generate an IPC key
 	int shmid = shmget(shm_key, SHM_SIZE, IPC_CREAT | 0666); //create a new shared memory segment
@@ -58,6 +49,14 @@ int main(int argc, char** argv) {
 	}
 	
 	while(1) { 
+		struct timespec ts;
+		clock_gettime(CLOCK_REALTIME, &ts);
+		struct tm* curr = localtime(&ts.tv_sec);
+		double sec_ns = (double)curr->tm_sec + ((double)ts.tv_nsec / 1000000000.);
+		strftime(str, SHM_SIZE, "[first] time: %X.", curr);
+		snprintf(str1, SHM_SIZE, "%.3lf pid: %d\n", sec_ns, getpid());
+		strcat(str, str1);
+		strncpy(data.str, str, SHM_SIZE);
 		memcpy(shm_ptr, &data, sizeof(struct data));
 	}
 
