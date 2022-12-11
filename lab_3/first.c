@@ -58,6 +58,7 @@ int main(int argc, char** argv) {
 		strcat(str, str1);
 		strncpy(data.str, str, SHM_SIZE);
 		memcpy(shm_ptr, &data, sizeof(struct data));
+		sleep(5);
 	}
 
 	shmdt(shm_ptr); //detach shm segment
