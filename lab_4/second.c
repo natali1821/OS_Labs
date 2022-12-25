@@ -20,7 +20,7 @@ int main(int argc, char** argv) {
 	(void)argv;
 
 	struct sembuf lock = {0, -1, 0};
-	struct sembuf unlock = {0, 1, 0};
+	//struct sembuf unlock = {0, 1, 0};
 
 	struct timespec ts;
 
@@ -44,14 +44,18 @@ int main(int argc, char** argv) {
 		exit(-1);
 	}
 
-	semop(semid, &lock, 1);
+	//semop(semid, &lock, 1);
 	clock_gettime(CLOCK_REALTIME, &ts);
 	struct tm* curr = localtime(&ts.tv_sec);
 	double sec_ns = (double)curr->tm_sec + ((double)ts.tv_nsec / 1000000000.);
 	printf("[second] time: %2d:%2d:%.3lf pid: %d\n", curr->tm_hour, curr->tm_min, sec_ns, getpid());
 	printf("%s", shm_ptr);
-	semop(semid, &unlock, 1);
-
+	
+	int op = semop(semid, &lock, 1);
+	if (op == -1) {
+		fprintf(stderr, "[second] semop: %s(%d)\n", strerror(errno), errno);
+	}
+	
 	shmdt(shm_ptr);	
 
 	return 0;
