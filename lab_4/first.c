@@ -21,7 +21,6 @@ int main(int argc, char** argv) {
 	(void)argv;
 
 	struct timespec ts;
-	struct sembuf lock = {0, -1, 0};
 	struct sembuf unlock = {0, 1, 0};
 
 	char str[SHM_SIZE];
@@ -56,13 +55,16 @@ int main(int argc, char** argv) {
 	}
 	
 	while(1) { 
-		semop(semid, &lock, 1);
 		clock_gettime(CLOCK_REALTIME, &ts);
 		struct tm* curr = localtime(&ts.tv_sec);
 		double sec_ns = (double)curr->tm_sec + ((double)ts.tv_nsec / 1000000000.);
 		sprintf(str, "[first] time: %2d:%2d:%.3lf pid: %d", curr->tm_hour, curr->tm_min, sec_ns, getpid());
 		strcpy(shm_ptr, str);
-		semop(semid, &unlock, 1);
+		
+		int op = semop(semid, &unlock, 1);
+		if (op == -1) {
+			fprintf(stderr, "[first] semop: %s(%d)\n", strerror(errno), errno);
+		}
 		sleep(5);
 	}
 
